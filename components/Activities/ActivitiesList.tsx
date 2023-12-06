@@ -4,7 +4,7 @@ import { COLORS } from "../../constants";
 import useFetch from "../../hook/useFetch";
 import { useEffect, useState } from "react";
 
-export default function ActivitiesList() {
+const ActivitiesList = () => {
   const [activities, setActivities] = useState([]);
 
   useEffect(() => {
@@ -38,3 +38,5 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.black,
   },
 });
+
+export default ActivitiesList;

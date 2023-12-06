@@ -2,7 +2,7 @@ import React from "react";
 import { Text, StyleSheet } from "react-native";
 import { FONT } from "../../constants";
 
-export default function MyText(props) {
+const MyText = (props) => {
   if (props.bold === undefined) {
     props.bold = false;
   }
@@ -27,3 +27,5 @@ const styles = StyleSheet.create({
     fontFamily: FONT.bold,
   },
 });
+
+export default MyText;
