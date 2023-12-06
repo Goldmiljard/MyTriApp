@@ -1,13 +1,15 @@
 {
   "expo": {
+    "scheme": "com.beyondkarman.mytriapp",
     "name": "my-tri-app",
+    "jsEngine": "hermes",
     "slug": "my-tri-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/images/icon.png",
+    "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -15,16 +17,32 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "scheme": "my-tri-app",
+      "bundleIdentifier": "com.beyondkarman.mytriapp",
+      "supportsTablet": true,
+      "userInterfaceStyle": "automatic"
     },
     "android": {
+      "jsEngine": "hermes",
+      "scheme": "my-tri-app",
+      "package": "com.beyondkarman.mytriapp",
+      "windowSoftInputMode": "adjustResize",
+      "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
-  }
+      "scheme": "my-tri-app",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "20cf1296-3136-4df6-9e20-ab728553cbaf"
+      }
+    },
+    "sdkVersion": "49.0.0"
+  },
+  "name": "my-tri-app"
 }
