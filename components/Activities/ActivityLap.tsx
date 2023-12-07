@@ -11,7 +11,7 @@ const ActivityLap = ({ lap }) => {
         <MyText style={styles.lapStats}>{lap.name}</MyText>
       </View>
       <View>
-        <StatPace averageSpeed={lap.averageSpeed}></StatPace>
+        <StatPace style={styles.lapStats} averageSpeed={lap.averageSpeed}></StatPace>
       </View>
       <View>
         <StatHR style={styles.lapStats} averageHeartrate={lap.averageHeartrate}></StatHR>
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   lapStats: {
-    color: COLORS.white,
+    color: COLORS.lightWhite,
   },
 });
 
