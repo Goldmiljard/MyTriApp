@@ -3,7 +3,8 @@ import { Platform } from "react-native";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Constants from "expo-constants";
+import useAxiosPost from "../../hook/useAxiosPost";
+import { STRINGS } from "../../constants";
 
 interface IAuthProps {
   authState?: { token: string | null; authenticated: boolean | null };
@@ -12,13 +13,7 @@ interface IAuthProps {
   onLogout?: () => Promise<any>;
 }
 
-const TOKEN_KEY = "my-jwt"; //this is not the key used to generate the JWT, just key for storage
-//const API_URL = "https://192.168.178.43:44397/api"//"https://mytricareer-api.azurewebsites.net/api";
 const AuthContext = createContext<IAuthProps>({});
-
-const API_URL = Constants?.expoConfig?.hostUri
-  ? "https://absolute-primary-sponge.ngrok-free.app/api"
-  : "https://mytricareer-api.azurewebsites.net/api";
 
 export const useAuth = () => {
   return useContext(AuthContext);
@@ -54,7 +49,7 @@ export const AuthProvider = ({ children }: any) => {
       return;
     }
     const loadToken = async () => {
-      const token = await getToken(TOKEN_KEY);
+      const token = await getToken(STRINGS.jwtTokenKey);
 
       if (token) {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -70,21 +65,11 @@ export const AuthProvider = ({ children }: any) => {
 
   const register = async (email: string, password: string) => {
     try {
-      const options = {
-        method: "POST",
-        url: `${API_URL}/Auth/register`,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: {
-          email: email,
-          password: password,
-          passwordConfirmation: password,
-        },
-      };
-      
-      const result = await axios.post(options.url, options.body);
+      const result = await useAxiosPost("/Auth/register", {
+        email: email,
+        password: password,
+        passwordConfirmation: password,
+      });
 
       return result;
     } catch (e) {
@@ -94,20 +79,10 @@ export const AuthProvider = ({ children }: any) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const options = {
-        method: "POST",
-        url: `${API_URL}/Auth/login`,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: {
-          email: email,
-          password: password,
-        },
-      };
-
-      const result = await axios.post(options.url, options.body);
+      const result = await useAxiosPost("/Auth/login", {
+        email: email,
+        password: password,
+      });
 
       setAuthState({
         token: result.data,
@@ -116,7 +91,7 @@ export const AuthProvider = ({ children }: any) => {
 
       axios.defaults.headers.common["Authorization"] = `Bearer ${result.data}`;
 
-      await setToken(TOKEN_KEY, result.data);
+      await setToken(STRINGS.jwtTokenKey, result.data);
 
       return result;
     } catch (error) {
@@ -126,10 +101,9 @@ export const AuthProvider = ({ children }: any) => {
 
   const logout = async () => {
     if (Platform.OS !== "web") {
-      await SecureStore.deleteItemAsync(TOKEN_KEY);
-    }
-    else {      
-      await AsyncStorage.removeItem(TOKEN_KEY);
+      await SecureStore.deleteItemAsync(STRINGS.jwtTokenKey);
+    } else {
+      await AsyncStorage.removeItem(STRINGS.jwtTokenKey);
     }
 
     axios.defaults.headers.common["Authorization"] = "";

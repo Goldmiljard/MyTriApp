@@ -1,30 +1,19 @@
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, Text } from "react-native";
 import Activity from "./Activity";
 import { COLORS } from "../../constants";
-import useFetch from "../../hook/useFetch";
-import { useEffect, useState } from "react";
+import useAxiosGet from "../../hook/useAxiosGet";
 
 const ActivitiesList = () => {
-  const [activities, setActivities] = useState([]);
-
-  useEffect(() => {
-    getActivities();
-  }, []);
-
-  const getActivities = () => {
-    useFetch("/Activities", "GET")
-      .then((response) => {
-        setActivities(response.data);
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  };
+  const { data, isLoading, error } = useAxiosGet("/Activities");
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
       <Text>Activities List</Text>
-      {activities?.map((activity) => (
+      {isLoading ? (
+          <ActivityIndicator size="large" color={COLORS.blue} />
+        ) : error ? (
+          <Text>Something went wrong</Text>
+        ) : data?.map((activity) => (
         <Activity activity={activity} key={`activity-${activity.id}`} />
       ))}
     </ScrollView>

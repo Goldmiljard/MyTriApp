@@ -1,12 +1,10 @@
-import axios from "axios";
 import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
-import { discovery } from "expo-auth-session/build/providers/Google";
 import { useEffect } from "react";
-import Constants from "expo-constants";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { COLORS } from "../../constants";
 import { MyText } from "../Generic";
 import * as WebBrowser from 'expo-web-browser';
+import useAxiosPost from "../../hook/useAxiosPost";
 
 const StravaAuthentication = () => {
 WebBrowser.maybeCompleteAuthSession();
@@ -28,19 +26,14 @@ WebBrowser.maybeCompleteAuthSession();
     discovery
   );
 
-  const API_URL = Constants?.expoConfig?.hostUri
-    ? "https://absolute-primary-sponge.ngrok-free.app/api"
-    : "https://mytricareer-api.azurewebsites.net/api";
-
-  const saveStravaAuthentication = async (code) => {
-    const url = `${API_URL}/stravaauthentication?code=${code}`;
-    const result = await axios.post(url);
-  };
-
   useEffect(() => {
     if (response?.type === "success") {
       const { code } = response.params;
-      saveStravaAuthentication(code);
+      useAxiosPost("/stravaauthentication", code).then(() => {        
+      })
+      .catch((error) => {
+        alert(error);
+      });
     }
   }, [response]);
 

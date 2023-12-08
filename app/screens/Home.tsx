@@ -1,24 +1,12 @@
-import { StyleSheet, SafeAreaView } from "react-native";
+import { StyleSheet, SafeAreaView, ActivityIndicator } from "react-native";
 import { COLORS } from "../../constants";
 import { MyText } from "../../components/Generic/";
 import StravaAuthentication from "../../components/Home/StravaAuthentication";
 import Logo from "../../components/Generic/Logo";
-import { useEffect, useState } from "react";
-import useFetch from "../../hook/useFetch";
+import useAxiosGet from "../../hook/useAxiosGet";
 
 export default function Home() {
-  const [isStravaAuthenticated, setStravaAuthenticated] = useState(false);
-
-  useEffect(() => {
-    useFetch("/StravaAuthentication", "GET")
-      .then((response) => {
-        console.log(response.data);
-        setStravaAuthenticated(response.data);
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  }, []);
+  const {data, isLoading, error } = useAxiosGet("/StravaAuthentication");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -26,7 +14,11 @@ export default function Home() {
       <MyText bold={true} style={styles.homeText}>
         Welcome to My Tri!
       </MyText>
-      {!isStravaAuthenticated ? (
+      {isLoading ? (
+          <ActivityIndicator size="large" color={COLORS.orange} />
+        ) : error ? (
+          <MyText>Something went wrong in loading your Strava authentication status</MyText>
+        ) : !data ? (
         <StravaAuthentication></StravaAuthentication>
       ) : (
         <></>
