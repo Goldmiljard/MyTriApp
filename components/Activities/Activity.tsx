@@ -9,11 +9,11 @@ import StatPace from "./StatPace";
 
 const Activity = ({ activity }) => {
   const activityTime = () => {
-    let hours = Math.floor(activity.elapsedTime / TIME.minutesPerHour);
+    let hours = Math.floor(activity.elapsedTime / TIME.secondsPerHour);
     let minutes = Math.floor(
-      (activity.elapsedTime % TIME.minutesPerHour) / TIME.minutesPerHour
+      (activity.elapsedTime % TIME.secondsPerHour) / TIME.minutesPerHour
     );
-    let seconds = activity.elapsedTime % TIME.secondsPerHour;
+    let seconds = activity.elapsedTime % TIME.minutesPerHour;
 
     return (
       <MyText style={styles.statsData}>
