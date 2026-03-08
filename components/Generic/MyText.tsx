@@ -3,18 +3,16 @@ import { Text, StyleSheet } from "react-native";
 import { FONT } from "../../constants";
 
 const MyText = (props) => {
-  if (props.bold === undefined) {
-    props.bold = false;
-  }
+  // avoid mutating props - they are frozen in strict mode
+  const { bold = false, style, children, ...rest } = props;
   return (
     <Text
       style={
-        props.bold
-          ? [styles.boldStyle, props.style]
-          : [styles.defaultStyle, props.style]
+        bold ? [styles.boldStyle, style] : [styles.defaultStyle, style]
       }
+      {...rest}
     >
-      {props.children}
+      {children}
     </Text>
   );
 }
